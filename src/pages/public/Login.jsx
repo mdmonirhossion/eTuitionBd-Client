@@ -32,8 +32,20 @@ export const Login = () => {
       });
       navigate(from, { replace: true });
     } catch (error) {
-      console.error(error);
-      Swal.fire('Login Failed', error.message || 'Invalid email or password.', 'error');
+      console.warn('Login notice:', error);
+      let errorMsg = 'Invalid email or password. Please check your credentials.';
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+        errorMsg = 'Incorrect email address or password. Please check and try again.';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMsg = 'Account access temporarily restricted due to multiple failed login attempts. Please try again later.';
+      }
+
+      Swal.fire({
+        icon: 'warning',
+        title: 'Sign In Notice',
+        text: errorMsg,
+        confirmButtonColor: '#4f46e5',
+      });
     } finally {
       setLoading(false);
     }
@@ -51,8 +63,12 @@ export const Login = () => {
       });
       navigate(from, { replace: true });
     } catch (error) {
-      console.error(error);
-      Swal.fire('Google Sign-In Error', error.message, 'error');
+      if (error.code === 'auth/popup-closed-by-user') {
+        console.info('Google sign-in popup closed by user.');
+        return;
+      }
+      console.warn('Google Sign-In Notice:', error);
+      Swal.fire('Google Sign-In Notice', 'Could not complete Google Sign-In. Please try again.', 'info');
     }
   };
 

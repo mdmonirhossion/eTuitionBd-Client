@@ -42,8 +42,22 @@ export const Register = () => {
       const targetPath = role === 'tutor' ? '/tutor/dashboard' : '/student/dashboard';
       navigate(targetPath, { replace: true });
     } catch (error) {
-      console.error(error);
-      Swal.fire('Registration Failed', error.message, 'error');
+      console.warn('Registration notice:', error);
+      let errorMsg = 'Failed to register account. Please try again.';
+      if (error.code === 'auth/email-already-in-use') {
+        errorMsg = 'An account with this email address already exists. Please Sign In instead.';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMsg = 'Please enter a valid email address.';
+      } else if (error.code === 'auth/weak-password') {
+        errorMsg = 'Password should be at least 6 characters long.';
+      }
+
+      Swal.fire({
+        icon: 'warning',
+        title: 'Registration Notice',
+        text: errorMsg,
+        confirmButtonColor: '#4f46e5',
+      });
     } finally {
       setLoading(false);
     }
@@ -61,8 +75,12 @@ export const Register = () => {
       });
       navigate('/student/dashboard');
     } catch (error) {
-      console.error(error);
-      Swal.fire('Google Register Error', error.message, 'error');
+      if (error.code === 'auth/popup-closed-by-user') {
+        console.info('Google login popup closed by user.');
+        return;
+      }
+      console.warn('Google Register Error:', error);
+      Swal.fire('Google Sign-In Notice', 'Could not complete Google Sign-In. Please try again.', 'info');
     }
   };
 

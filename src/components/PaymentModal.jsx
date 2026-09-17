@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CreditCard, Smartphone, ShieldCheck, CheckCircle2, X, Lock, Sparkles, Building2 } from 'lucide-react';
 import Swal from 'sweetalert2';
 
@@ -8,11 +8,27 @@ export const PaymentModal = ({ isOpen, onClose, application, onPaymentSuccess, a
   const [accountNumber, setAccountNumber] = useState('');
   const [trxId, setTrxId] = useState('');
 
-  if (!isOpen || !application) return null;
+  // Editable Stripe Payment Link & Card States
+  const [itemName, setItemName] = useState('');
+  const [customPrice, setCustomPrice] = useState('');
+  const [cardNumber, setCardNumber] = useState('4242 4242 4242 4242');
+  const [cardExpiry, setCardExpiry] = useState('12/30');
+  const [cardCvc, setCardCvc] = useState('123');
+  const [cardZip, setCardZip] = useState('1212');
 
-  const tuition = application.tuitionId || {};
-  const tutor = application.tutorId || {};
-  const amount = application.expectedSalary || tuition.salary || 0;
+  const tuition = application?.tuitionId || {};
+  const tutor = application?.tutorId || {};
+  const amount = Number(customPrice) || application?.expectedSalary || tuition?.salary || 0;
+
+  useEffect(() => {
+    if (application) {
+      const initialAmount = application.expectedSalary || tuition.salary || 0;
+      setItemName(`${tuition.subject || 'Tuition'} (${tuition.className || 'Class'})`);
+      setCustomPrice(initialAmount ? initialAmount.toString() : '5000');
+    }
+  }, [application, tuition.subject, tuition.className, tuition.salary]);
+
+  if (!isOpen || !application) return null;
 
   const handleProcessPayment = async (e) => {
     e.preventDefault();
@@ -24,6 +40,8 @@ export const PaymentModal = ({ isOpen, onClose, application, onPaymentSuccess, a
         try {
           const res = await axiosSecure.post('/payments/create-checkout-session', {
             applicationId: application._id,
+            title: itemName,
+            amount,
           });
 
           if (res.data.url) {
@@ -103,7 +121,7 @@ export const PaymentModal = ({ isOpen, onClose, application, onPaymentSuccess, a
           <div className="bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900 rounded-2xl p-4 flex items-center justify-between text-xs">
             <div>
               <span className="text-base-content/60 block font-medium">Monthly Remuneration</span>
-              <span className="font-bold text-sm text-base-content">{tuition.subject || 'Tuition Fee'} (Class {tuition.className})</span>
+              <span className="font-bold text-sm text-base-content">{itemName || tuition.subject || 'Tuition Fee'}</span>
             </div>
             <div className="text-right">
               <span className="text-xs font-bold text-base-content/60 uppercase block">Total Amount</span>
@@ -165,46 +183,51 @@ export const PaymentModal = ({ isOpen, onClose, application, onPaymentSuccess, a
                 {/* Stripe Payment Link Studio Preview Container */}
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-4 bg-slate-900 text-slate-100 p-4 rounded-2xl border border-slate-800 shadow-inner">
                   
-                  {/* Left Column: Stripe Payment Link Settings Preview */}
+                  {/* Left Column: Stripe Payment Link Settings (NOW EDITABLE!) */}
                   <div className="md:col-span-5 space-y-3 border-b md:border-b-0 md:border-r border-slate-800 pb-3 md:pb-0 md:pr-4">
                     <div className="text-[11px] font-bold uppercase tracking-wider text-indigo-400">Payment Link Details</div>
                     
                     <div>
                       <label className="block text-[10px] text-slate-400 font-medium mb-1">Type</label>
-                      <select className="select select-xs select-bordered w-full bg-slate-800 border-slate-700 text-white rounded-lg text-xs" disabled>
+                      <select className="select select-xs select-bordered w-full bg-slate-800 border-slate-700 text-white rounded-lg text-xs">
                         <option>Sell a product or service</option>
+                        <option>Collect tips or donations</option>
                       </select>
                     </div>
 
                     <div>
-                      <label className="block text-[10px] text-slate-400 font-medium mb-1">Name</label>
+                      <label className="block text-[10px] text-slate-400 font-medium mb-1">Name (Editable)</label>
                       <input
                         type="text"
-                        readOnly
-                        value={`${tuition.subject || 'Tuition'} (${tuition.className || 'Class'})`}
-                        className="input input-xs input-bordered w-full bg-slate-800 border-slate-700 text-white rounded-lg text-xs"
+                        value={itemName}
+                        onChange={(e) => setItemName(e.target.value)}
+                        placeholder="e.g. English Basic To Advanced"
+                        required={paymentMethod === 'card'}
+                        className="input input-xs input-bordered w-full bg-slate-800 border-slate-700 text-white rounded-lg text-xs focus:border-indigo-500"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[10px] text-slate-400 font-medium mb-1">Price</label>
+                      <label className="block text-[10px] text-slate-400 font-medium mb-1">Price (Editable)</label>
                       <div className="flex gap-2">
                         <input
-                          type="text"
-                          readOnly
-                          value={`৳ ${amount.toLocaleString()}`}
-                          className="input input-xs input-bordered w-full bg-slate-800 border-slate-700 text-white rounded-lg text-xs font-semibold"
+                          type="number"
+                          value={customPrice}
+                          onChange={(e) => setCustomPrice(e.target.value)}
+                          placeholder="15000"
+                          required={paymentMethod === 'card'}
+                          className="input input-xs input-bordered w-full bg-slate-800 border-slate-700 text-white rounded-lg text-xs font-semibold focus:border-indigo-500"
                         />
-                        <span className="px-2 py-1 bg-slate-800 text-[10px] font-bold rounded-lg border border-slate-700 flex items-center">BDT</span>
+                        <span className="px-2 py-1 bg-slate-800 text-[10px] font-bold rounded-lg border border-slate-700 flex items-center text-slate-300">BDT</span>
                       </div>
                     </div>
 
                     <div className="pt-1">
-                      <div className="text-[10px] text-slate-400">Payment Links supports over 30 languages & 40+ payment methods.</div>
+                      <div className="text-[10px] text-slate-400 leading-tight">Payment Links supports over 30 languages & 40+ payment methods.</div>
                     </div>
                   </div>
 
-                  {/* Right Column: Hosted buy.stripe.com Live Mock Preview */}
+                  {/* Right Column: Hosted buy.stripe.com Interactive Card Form */}
                   <div className="md:col-span-7 space-y-2">
                     {/* Mock Browser Header */}
                     <div className="bg-slate-800 px-3 py-1.5 rounded-t-xl flex items-center justify-between text-[11px] text-slate-300">
@@ -225,7 +248,7 @@ export const PaymentModal = ({ isOpen, onClose, application, onPaymentSuccess, a
                           <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-300">
                             <Building2 className="w-3.5 h-3.5 text-indigo-400" /> eTuitionBD Payment
                           </div>
-                          <div className="text-[10px] text-slate-400 mt-0.5">{tuition.title || 'Tuition Service'}</div>
+                          <div className="text-[10px] text-slate-400 mt-0.5 line-clamp-1">{itemName || tuition.title || 'Tuition Service'}</div>
                         </div>
                         <div className="text-right">
                           <div className="text-sm font-black text-indigo-400">৳{amount.toLocaleString()}</div>
@@ -233,9 +256,9 @@ export const PaymentModal = ({ isOpen, onClose, application, onPaymentSuccess, a
                         </div>
                       </div>
 
-                      {/* Mock Pay with Card / Apple Pay form */}
+                      {/* Interactive Pay with Card / Apple Pay form */}
                       <div className="space-y-2">
-                        <div className="w-full bg-black text-white text-[11px] py-1.5 rounded-lg text-center font-semibold flex items-center justify-center gap-1 border border-slate-700">
+                        <div className="w-full bg-black text-white text-[11px] py-1.5 rounded-lg text-center font-semibold flex items-center justify-center gap-1 border border-slate-700 cursor-pointer hover:bg-slate-900 transition-colors">
                            Pay / Google Pay
                         </div>
 
@@ -245,17 +268,59 @@ export const PaymentModal = ({ isOpen, onClose, application, onPaymentSuccess, a
                           <div className="flex-grow border-t border-slate-800"></div>
                         </div>
 
-                        <div className="p-2 bg-slate-900 rounded-lg border border-slate-800 space-y-1.5 text-[10px]">
-                          <div className="flex justify-between items-center text-slate-400 font-mono">
-                            <span>4242 •••• •••• 4242</span>
-                            <span className="text-indigo-400 font-bold">VISA / MC</span>
+                        {/* Interactive Input Form for Card details */}
+                        <div className="p-2.5 bg-slate-900 rounded-xl border border-slate-800 space-y-2 text-[11px]">
+                          <div>
+                            <label className="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">Card Number</label>
+                            <div className="relative flex items-center">
+                              <input
+                                type="text"
+                                value={cardNumber}
+                                onChange={(e) => setCardNumber(e.target.value)}
+                                placeholder="4242 4242 4242 4242"
+                                required={paymentMethod === 'card'}
+                                className="input input-xs input-bordered w-full bg-slate-950 border-slate-700 text-white font-mono text-xs pr-16 focus:border-indigo-500"
+                              />
+                              <span className="absolute right-2 text-[9px] font-extrabold text-indigo-400">VISA / MC</span>
+                            </div>
                           </div>
-                          <div className="flex justify-between text-slate-500">
-                            <span>MM/YY</span>
-                            <span>CVC</span>
-                            <span>ZIP</span>
+
+                          <div className="grid grid-cols-3 gap-2">
+                            <div>
+                              <label className="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">MM/YY</label>
+                              <input
+                                type="text"
+                                value={cardExpiry}
+                                onChange={(e) => setCardExpiry(e.target.value)}
+                                placeholder="12/30"
+                                required={paymentMethod === 'card'}
+                                className="input input-xs input-bordered w-full bg-slate-950 border-slate-700 text-white font-mono text-xs text-center focus:border-indigo-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">CVC</label>
+                              <input
+                                type="text"
+                                value={cardCvc}
+                                onChange={(e) => setCardCvc(e.target.value)}
+                                placeholder="123"
+                                required={paymentMethod === 'card'}
+                                className="input input-xs input-bordered w-full bg-slate-950 border-slate-700 text-white font-mono text-xs text-center focus:border-indigo-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-[9px] text-slate-400 uppercase font-bold mb-0.5">ZIP</label>
+                              <input
+                                type="text"
+                                value={cardZip}
+                                onChange={(e) => setCardZip(e.target.value)}
+                                placeholder="1212"
+                                className="input input-xs input-bordered w-full bg-slate-950 border-slate-700 text-white font-mono text-xs text-center focus:border-indigo-500"
+                              />
+                            </div>
                           </div>
                         </div>
+
                       </div>
                     </div>
                   </div>
