@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAxiosSecure } from '../../hooks/useAxiosSecure';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { EmptyState } from '../../components/EmptyState';
-import { Shield, Trash2, UserCheck } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import Swal from 'sweetalert2';
 
 export const AdminUsers = () => {
@@ -37,8 +37,8 @@ export const AdminUsers = () => {
 
   const handleDeleteUser = async (userId) => {
     const result = await Swal.fire({
-      title: 'Delete User Account?',
-      text: 'This user account will be removed permanently.',
+      title: 'Delete User?',
+      text: 'This action cannot be undone.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#e11d48',
@@ -48,7 +48,7 @@ export const AdminUsers = () => {
     if (result.isConfirmed) {
       try {
         await axiosSecure.delete(`/users/admin/${userId}`);
-        Swal.fire('Deleted', 'User account deleted.', 'success');
+        Swal.fire('Deleted', 'User removed successfully.', 'success');
         fetchUsers();
       } catch (err) {
         console.error(err);
@@ -63,16 +63,15 @@ export const AdminUsers = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold font-heading text-base-content">User Management</h2>
-          <p className="text-xs text-base-content/60">View and manage all registered Students, Tutors, and Administrators.</p>
+          <h2 className="text-xl font-bold text-base-content">User Management</h2>
+          <p className="text-xs text-base-content/60">Manage accounts and role permissions</p>
         </div>
 
         <div className="flex items-center gap-2">
-          <label className="text-xs font-bold text-base-content/60 uppercase">Filter Role:</label>
           <select
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
-            className="select select-bordered select-sm rounded-xl text-xs font-semibold"
+            className="select select-bordered select-sm rounded-xl text-xs"
           >
             <option value="All">All Roles</option>
             <option value="student">Students</option>
@@ -83,15 +82,13 @@ export const AdminUsers = () => {
       </div>
 
       {users.length > 0 ? (
-        <div className="bg-base-100 dark:bg-base-200 rounded-3xl border border-base-200 dark:border-base-300 shadow-sm overflow-hidden">
+        <div className="bg-base-100 rounded-2xl border border-base-200 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="table w-full text-xs">
               <thead>
                 <tr className="bg-base-200/50 text-base-content/70">
-                  <th>User Profile</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Current Role</th>
+                  <th>User</th>
+                  <th>Role</th>
                   <th>Change Role</th>
                   <th className="text-right">Action</th>
                 </tr>
@@ -99,21 +96,25 @@ export const AdminUsers = () => {
               <tbody>
                 {users.map((u) => (
                   <tr key={u._id} className="hover:bg-base-200/40">
+                    {/* User Info: Name + Email একসাথে */}
                     <td>
                       <div className="flex items-center gap-3">
                         <img
                           src={u.photoURL || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60'}
                           alt={u.name}
-                          className="w-8 h-8 rounded-full object-cover border"
+                          className="w-9 h-9 rounded-full object-cover border border-base-300"
                         />
-                        <span className="font-bold text-base-content">{u.name}</span>
+                        <div>
+                          <p className="font-semibold text-base-content text-xs">{u.name}</p>
+                          <p className="text-[11px] text-base-content/50">{u.email}</p>
+                        </div>
                       </div>
                     </td>
-                    <td>{u.email}</td>
-                    <td>{u.phone || 'N/A'}</td>
+
+                    {/* Badge */}
                     <td>
                       <span
-                        className={`badge badge-sm uppercase font-bold ${
+                        className={`badge badge-sm font-semibold uppercase ${
                           u.role === 'admin'
                             ? 'badge-error text-white'
                             : u.role === 'tutor'
@@ -124,6 +125,8 @@ export const AdminUsers = () => {
                         {u.role}
                       </span>
                     </td>
+
+                    {/* Quick Role Change */}
                     <td>
                       <select
                         value={u.role}
@@ -135,9 +138,15 @@ export const AdminUsers = () => {
                         <option value="admin">Admin</option>
                       </select>
                     </td>
+
+                    {/* Delete Action */}
                     <td className="text-right">
-                      <button onClick={() => handleDeleteUser(u._id)} className="btn btn-xs btn-ghost text-rose-600">
-                        <Trash2 className="w-3.5 h-3.5" />
+                      <button
+                        onClick={() => handleDeleteUser(u._id)}
+                        className="btn btn-xs btn-ghost text-rose-500 hover:bg-rose-50"
+                        title="Delete User"
+                      >
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </td>
                   </tr>

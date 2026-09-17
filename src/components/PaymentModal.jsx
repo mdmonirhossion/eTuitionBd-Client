@@ -77,8 +77,8 @@ export const PaymentModal = ({ isOpen, onClose, application, onPaymentSuccess, a
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm animate-fade-in">
-      <div className="bg-base-100 dark:bg-base-200 rounded-3xl max-w-lg w-full overflow-hidden border border-base-300 shadow-2xl space-y-0">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/75 backdrop-blur-md animate-fade-in">
+      <div className="bg-base-100 dark:bg-base-200 rounded-3xl max-w-2xl w-full overflow-hidden border border-base-300 shadow-2xl space-y-0">
         
         {/* Modal Header */}
         <div className="bg-gradient-to-r from-indigo-900 via-indigo-800 to-cyan-900 p-6 text-white relative">
@@ -90,7 +90,7 @@ export const PaymentModal = ({ isOpen, onClose, application, onPaymentSuccess, a
           </button>
           
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-cyan-300">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" /> Secure Payment Gateway
+            <ShieldCheck className="w-4 h-4 text-emerald-400" /> Stripe Payment Links Studio
           </div>
           <h3 className="text-xl font-bold font-heading mt-1">Complete Tuition Payment</h3>
           <p className="text-xs text-indigo-200 mt-1">Hire {tutor.name || 'Tutor'} for "{tuition.title || 'Tuition'}"</p>
@@ -161,16 +161,106 @@ export const PaymentModal = ({ isOpen, onClose, application, onPaymentSuccess, a
           {/* Conditional Method Form */}
           <form onSubmit={handleProcessPayment} className="space-y-4">
             {paymentMethod === 'card' && (
-              <div className="p-4 rounded-2xl bg-base-200/50 border border-base-300 space-y-3 text-xs">
-                <div className="flex items-center justify-between text-base-content/70">
-                  <span className="font-semibold flex items-center gap-1">
-                    <Lock className="w-3.5 h-3.5 text-emerald-500" /> 256-bit Encrypted Stripe Gateway
-                  </span>
-                  <span className="badge badge-sm badge-info font-bold">Stripe Secured</span>
+              <div className="space-y-4">
+                {/* Stripe Payment Link Studio Preview Container */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 bg-slate-900 text-slate-100 p-4 rounded-2xl border border-slate-800 shadow-inner">
+                  
+                  {/* Left Column: Stripe Payment Link Settings Preview */}
+                  <div className="md:col-span-5 space-y-3 border-b md:border-b-0 md:border-r border-slate-800 pb-3 md:pb-0 md:pr-4">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-indigo-400">Payment Link Details</div>
+                    
+                    <div>
+                      <label className="block text-[10px] text-slate-400 font-medium mb-1">Type</label>
+                      <select className="select select-xs select-bordered w-full bg-slate-800 border-slate-700 text-white rounded-lg text-xs" disabled>
+                        <option>Sell a product or service</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] text-slate-400 font-medium mb-1">Name</label>
+                      <input
+                        type="text"
+                        readOnly
+                        value={`${tuition.subject || 'Tuition'} (${tuition.className || 'Class'})`}
+                        className="input input-xs input-bordered w-full bg-slate-800 border-slate-700 text-white rounded-lg text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] text-slate-400 font-medium mb-1">Price</label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          readOnly
+                          value={`৳ ${amount.toLocaleString()}`}
+                          className="input input-xs input-bordered w-full bg-slate-800 border-slate-700 text-white rounded-lg text-xs font-semibold"
+                        />
+                        <span className="px-2 py-1 bg-slate-800 text-[10px] font-bold rounded-lg border border-slate-700 flex items-center">BDT</span>
+                      </div>
+                    </div>
+
+                    <div className="pt-1">
+                      <div className="text-[10px] text-slate-400">Payment Links supports over 30 languages & 40+ payment methods.</div>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Hosted buy.stripe.com Live Mock Preview */}
+                  <div className="md:col-span-7 space-y-2">
+                    {/* Mock Browser Header */}
+                    <div className="bg-slate-800 px-3 py-1.5 rounded-t-xl flex items-center justify-between text-[11px] text-slate-300">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-2.5 h-2.5 rounded-full bg-red-500/80 inline-block"></span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80 inline-block"></span>
+                        <span className="w-2.5 h-2.5 rounded-full bg-green-500/80 inline-block"></span>
+                      </div>
+                      <span className="font-mono text-[10px] text-slate-400 flex items-center gap-1">
+                        <Lock className="w-3 h-3 text-emerald-400" /> buy.stripe.com
+                      </span>
+                    </div>
+
+                    {/* Mock Page Content */}
+                    <div className="bg-slate-950 p-3 rounded-b-xl border border-slate-800 text-xs space-y-3">
+                      <div className="flex justify-between items-start border-b border-slate-800 pb-2">
+                        <div>
+                          <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-300">
+                            <Building2 className="w-3.5 h-3.5 text-indigo-400" /> eTuitionBD Payment
+                          </div>
+                          <div className="text-[10px] text-slate-400 mt-0.5">{tuition.title || 'Tuition Service'}</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-sm font-black text-indigo-400">৳{amount.toLocaleString()}</div>
+                          <div className="text-[9px] text-slate-500">Powered by Stripe</div>
+                        </div>
+                      </div>
+
+                      {/* Mock Pay with Card / Apple Pay form */}
+                      <div className="space-y-2">
+                        <div className="w-full bg-black text-white text-[11px] py-1.5 rounded-lg text-center font-semibold flex items-center justify-center gap-1 border border-slate-700">
+                           Pay / Google Pay
+                        </div>
+
+                        <div className="relative flex py-1 items-center">
+                          <div className="flex-grow border-t border-slate-800"></div>
+                          <span className="flex-shrink mx-2 text-[9px] text-slate-500 uppercase">Or pay with card</span>
+                          <div className="flex-grow border-t border-slate-800"></div>
+                        </div>
+
+                        <div className="p-2 bg-slate-900 rounded-lg border border-slate-800 space-y-1.5 text-[10px]">
+                          <div className="flex justify-between items-center text-slate-400 font-mono">
+                            <span>4242 •••• •••• 4242</span>
+                            <span className="text-indigo-400 font-bold">VISA / MC</span>
+                          </div>
+                          <div className="flex justify-between text-slate-500">
+                            <span>MM/YY</span>
+                            <span>CVC</span>
+                            <span>ZIP</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
-                <p className="text-base-content/60 text-[11px]">
-                  Clicking proceed will redirect to Stripe Checkout or process your card transaction securely.
-                </p>
               </div>
             )}
 
@@ -220,6 +310,10 @@ export const PaymentModal = ({ isOpen, onClose, application, onPaymentSuccess, a
               >
                 {processing ? (
                   <>Processing...</>
+                ) : paymentMethod === 'card' ? (
+                  <>
+                    <Sparkles className="w-4 h-4 text-cyan-300" /> Create Payment Link & Pay ৳{amount.toLocaleString()} →
+                  </>
                 ) : (
                   <>
                     <CheckCircle2 className="w-4 h-4" /> Pay ৳{amount.toLocaleString()} Now

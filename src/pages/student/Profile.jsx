@@ -40,6 +40,7 @@ export const Profile = () => {
   const [phone, setPhone] = useState(dbUser?.phone || '');
   const [photoURL, setPhotoURL] = useState(dbUser?.photoURL || user?.photoURL || '');
   const [bio, setBio] = useState(dbUser?.bio || '');
+  const [medium, setMedium] = useState(dbUser?.medium || 'English Medium');
   const [className, setClassName] = useState(dbUser?.className || 'Class 9');
   const [subjects, setSubjects] = useState(
     Array.isArray(dbUser?.subjects)

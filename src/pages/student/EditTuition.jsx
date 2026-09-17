@@ -55,6 +55,7 @@ export const EditTuition = () => {
         daysPerWeek: Number(daysPerWeek),
         schedule,
         description,
+        status: 'pending',
       });
 
       Swal.fire('Updated', 'Tuition updated successfully. Status reset to pending for review.', 'success');

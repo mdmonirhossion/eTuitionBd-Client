@@ -36,6 +36,7 @@ export const CreateTuition = () => {
         daysPerWeek: Number(daysPerWeek),
         schedule,
         description,
+        status: 'pending',
       });
 
       Swal.fire({
