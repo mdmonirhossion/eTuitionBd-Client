@@ -31,8 +31,9 @@ export const Profile = () => {
   const fileInputRef = useRef(null);
   const certFileInputRef = useRef(null);
 
-  // Cloudinary credentials
-  const CLOUD_NAME = 'dtqotfpgp';
+  // Cloudinary credentials from env or fallback
+  const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dtqotfpgp';
+  const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'unsigned_preset';
 
   // Basic Profile State
   const [name, setName] = useState(dbUser?.name || user?.displayName || '');
@@ -93,7 +94,7 @@ export const Profile = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_preset', 'unsigned_preset'); // Default unsigned preset or fallback
+    formData.append('upload_preset', UPLOAD_PRESET);
 
     if (isCertificate) setUploadingCert(true);
     else setUploadingImage(true);
@@ -107,7 +108,7 @@ export const Profile = () => {
 
       const data = await res.json();
 
-      if (data.secure_url) {
+      if (res.ok && data.secure_url) {
         if (isCertificate) {
           setCertificateURL(data.secure_url);
           Swal.fire({
@@ -128,6 +129,8 @@ export const Profile = () => {
           });
         }
       } else {
+        const errorMsg = data?.error?.message || 'Invalid or unconfigured Cloudinary upload preset.';
+        console.warn('Cloudinary upload notice:', errorMsg);
         // Fallback for file reader preview if unsigned preset requires setup
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -135,7 +138,11 @@ export const Profile = () => {
           else setPhotoURL(reader.result);
         };
         reader.readAsDataURL(file);
-        Swal.fire('Uploaded', 'File attached successfully.', 'success');
+        Swal.fire({
+          icon: 'info',
+          title: 'Local Preview Attached',
+          text: `Cloudinary Note: ${errorMsg} (Using local preview). Configure VITE_CLOUDINARY_UPLOAD_PRESET in .env with a valid unsigned upload preset from Cloudinary.`,
+        });
       }
     } catch (err) {
       console.warn('Cloudinary direct upload note:', err);
@@ -145,6 +152,11 @@ export const Profile = () => {
         else setPhotoURL(reader.result);
       };
       reader.readAsDataURL(file);
+      Swal.fire({
+        icon: 'info',
+        title: 'Local Preview Attached',
+        text: 'Could not connect to Cloudinary. Local preview attached.',
+      });
     } finally {
       setUploadingImage(false);
       setUploadingCert(false);
