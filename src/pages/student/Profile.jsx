@@ -40,9 +40,14 @@ export const Profile = () => {
   const [phone, setPhone] = useState(dbUser?.phone || '');
   const [photoURL, setPhotoURL] = useState(dbUser?.photoURL || user?.photoURL || '');
   const [bio, setBio] = useState(dbUser?.bio || '');
-  const [medium, setMedium] = useState(dbUser?.medium || 'English Medium');
   const [className, setClassName] = useState(dbUser?.className || 'Class 9');
-  const [subject, setSubject] = useState(dbUser?.subject || 'Mathematics');
+  const [subjects, setSubjects] = useState(
+    Array.isArray(dbUser?.subjects)
+      ? dbUser.subjects
+      : dbUser?.subject
+      ? [dbUser.subject]
+      : ['Mathematics']
+  );
   const [salary, setSalary] = useState(dbUser?.salary || 5000);
   const [experience, setExperience] = useState(dbUser?.experience || 2);
   const [gender, setGender] = useState(dbUser?.gender || 'Male');
@@ -72,7 +77,11 @@ export const Profile = () => {
       setBio(dbUser.bio || '');
       setMedium(dbUser.medium || 'English Medium');
       setClassName(dbUser.className || 'Class 9');
-      setSubject(dbUser.subject || 'Mathematics');
+      if (dbUser.subjects && Array.isArray(dbUser.subjects)) {
+        setSubjects(dbUser.subjects);
+      } else if (dbUser.subject) {
+        setSubjects([dbUser.subject]);
+      }
       setSalary(dbUser.salary || 5000);
       setExperience(dbUser.experience || 2);
       setGender(dbUser.gender || 'Male');
@@ -163,6 +172,17 @@ export const Profile = () => {
     }
   };
 
+  // Subject toggle handler for multi-select
+  const handleSubjectToggle = (subj) => {
+    if (subjects.includes(subj)) {
+      if (subjects.length > 1) {
+        setSubjects(subjects.filter((item) => item !== subj));
+      }
+    } else {
+      setSubjects([...subjects, subj]);
+    }
+  };
+
   // Submit Basic Profile
   const handleBasicProfileSubmit = async (e) => {
     e.preventDefault();
@@ -176,7 +196,8 @@ export const Profile = () => {
         bio,
         medium,
         className,
-        subject,
+        subjects,
+        subject: subjects.join(', '),
         salary: Number(salary),
         experience: Number(experience),
         gender,
@@ -190,7 +211,7 @@ export const Profile = () => {
 
       Swal.fire({
         icon: 'success',
-        title: '🎉 Profile Saved Successfully!',
+        title: 'Profile Saved Successfully!',
         text: 'Your basic profile is updated. Education & Qualification sections are now unlocked.',
         confirmButtonColor: '#4f46e5',
       });
@@ -393,20 +414,36 @@ export const Profile = () => {
           {/* Subject & Minimum Salary Slider */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-xs font-bold text-base-content/60 uppercase mb-1">Preferred Subject</label>
-              <select
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                className="select select-bordered w-full rounded-xl text-sm"
-              >
-                <option value="Mathematics">Mathematics</option>
-                <option value="Physics">Physics</option>
-                <option value="Chemistry">Chemistry</option>
-                <option value="Biology">Biology</option>
-                <option value="English">English</option>
-                <option value="ICT & Computer">ICT & Computer</option>
-                <option value="Accounting">Accounting</option>
-              </select>
+              <label className="block text-xs font-bold text-base-content/60 uppercase mb-2">
+                Preferred Subjects <span className="text-indigo-600 dark:text-indigo-400 font-normal">({subjects.length} selected)</span>
+              </label>
+              <div className="flex flex-wrap gap-1.5 p-3 rounded-2xl bg-base-200/50 border border-base-300 min-h-[95px] items-center">
+                {[
+                  'Mathematics',
+                  'Physics',
+                  'Chemistry',
+                  'Biology',
+                  'English',
+                  'ICT & Computer',
+                  'Accounting',
+                ].map((subj) => {
+                  const isSelected = subjects.includes(subj);
+                  return (
+                    <button
+                      key={subj}
+                      type="button"
+                      onClick={() => handleSubjectToggle(subj)}
+                      className={`btn btn-xs rounded-xl font-semibold transition-all ${
+                        isSelected
+                          ? 'bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-600 shadow-sm'
+                          : 'btn-ghost bg-base-100 hover:bg-base-200 text-base-content/70 border-base-300'
+                      }`}
+                    >
+                      {isSelected ? '✓ ' : '+ '} {subj}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             <div>
