@@ -5,17 +5,7 @@ import { TuitionCard } from '../../components/TuitionCard';
 import { TutorCard } from '../../components/TutorCard';
 import { SectionTitle } from '../../components/SectionTitle';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import {
-  Search,
-  BookOpen,
-  Users,
-  ShieldCheck,
-  CreditCard,
-  ArrowRight,
-  GraduationCap,
-  Sparkles,
-  CheckCircle,
-} from 'lucide-react';
+import { Search, ArrowRight, Sparkles, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const Home = () => {

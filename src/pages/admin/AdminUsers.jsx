@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAxiosSecure } from '../../hooks/useAxiosSecure';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { EmptyState } from '../../components/EmptyState';
-import { Trash2, Eye, X, Phone, Mail, BookOpen, Award, ShieldCheck, MapPin, User as UserIcon } from 'lucide-react';
+import { Trash2, Eye, X, Phone, Mail, Award, MapPin } from 'lucide-react';
 import Swal from 'sweetalert2';
 
 export const AdminUsers = () => {

@@ -2,32 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useAxiosSecure } from '../../hooks/useAxiosSecure';
 import { ChangePassword } from '../../components/ChangePassword';
-import {
-  Upload,
-  User,
-  Mail,
-  Phone,
-  Save,
-  ShieldCheck,
-  Plus,
-  Lock,
-  Unlock,
-  Sliders,
-  Award,
-  BookOpen,
-  Calendar,
-  Clock,
-  FileText,
-  MapPin,
-  CheckCircle2,
-  AlertCircle,
-  Loader2,
-  Trash2,
-} from 'lucide-react';
+import { Upload, User, Phone, Save, Plus, Lock, Loader2 } from 'lucide-react';
 import Swal from 'sweetalert2';
 
 export const Profile = () => {
-  const { user, dbUser, role, refetchDbUser } = useAuth();
+  const { user, dbUser, refetchDbUser } = useAuth();
   const axiosSecure = useAxiosSecure();
   const fileInputRef = useRef(null);
   const certFileInputRef = useRef(null);

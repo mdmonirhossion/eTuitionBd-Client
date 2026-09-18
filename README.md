@@ -18,8 +18,8 @@ A comprehensive, full-stack Tuition Management Platform built with **React 19**,
 | Role | Email | Password |
 |---|---|---|
 | **Admin** | `admin@etuitionbd.com` | `admin123` |
-| **Student** | `student@etuitionbd.com` | `password123` |
-| **Tutor** | `tutor@etuitionbd.com` | `` |
+| **Student** | `student@etuitionbd.com` | `123456` |
+| **Tutor** | `tutor@etuitionbd.com` | `tutor123` |
 
 ---
 
