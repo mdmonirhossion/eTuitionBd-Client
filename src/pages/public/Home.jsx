@@ -137,8 +137,8 @@ export const Home = () => {
 
                 <div className="relative bg-base-100 dark:bg-base-200 p-6 rounded-3xl border border-base-200 dark:border-base-300 shadow-2xl space-y-4">
                   <div className="flex items-center gap-4 pb-4 border-b border-base-200">
-                    <div className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-bold">
-                      <GraduationCap className="w-6 h-6" />
+                    <div className="w-12 h-12 rounded-full bg-white border-2 border-indigo-500/30 shadow-md flex items-center justify-center p-0.5 overflow-hidden shrink-0">
+                      <img src="/E-TuitionBd Logo.png" alt="eTuitionBD Logo" className="w-full h-full object-cover rounded-full" />
                     </div>
                     <div>
                       <h4 className="font-bold font-heading text-base-content">Top Mathematics Tutor</h4>

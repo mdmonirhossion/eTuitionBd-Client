@@ -44,8 +44,8 @@ export const Navbar = () => {
           
           {/* Brand Logo */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform duration-300">
-              <GraduationCap className="w-6 h-6" />
+            <div className="w-11 h-11 rounded-full bg-white border-2 border-indigo-500/30 shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-all duration-300 flex items-center justify-center p-0.5 overflow-hidden">
+              <img src="/E-TuitionBd Logo.png" alt="eTuitionBD Logo" className="w-full h-full object-cover rounded-full" />
             </div>
             <div>
               <span className="text-2xl font-bold font-heading tracking-tight text-base-content">

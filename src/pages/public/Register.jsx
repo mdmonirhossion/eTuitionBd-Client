@@ -90,8 +90,8 @@ export const Register = () => {
         
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-cyan-500 flex items-center justify-center text-white mx-auto shadow-md">
-            <GraduationCap className="w-6 h-6" />
+          <div className="w-16 h-16 rounded-full bg-white border-4 border-indigo-500/30 shadow-xl mx-auto flex items-center justify-center p-1 overflow-hidden hover:scale-105 transition-all duration-300">
+            <img src="/E-TuitionBd Logo.png" alt="eTuitionBD Logo" className="w-full h-full object-cover rounded-full" />
           </div>
           <h2 className="text-2xl font-extrabold font-heading text-base-content">Create an Account</h2>
           <p className="text-xs text-base-content/60">Join as a Student or Tutor today</p>
