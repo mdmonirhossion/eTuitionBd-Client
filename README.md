@@ -1,31 +1,31 @@
-# 🎓 eTuitionBD - Full-Stack Tuition Management Platform
+#  eTuitionBD - Full-Stack Tuition Management Platform
 
 A comprehensive, full-stack Tuition Management Platform built with **React 19**, **Vite 8**, **Tailwind CSS 4**, **DaisyUI 5**, **Node.js**, **Express**, **MongoDB**, **Firebase Authentication**, and **Stripe Payment Gateway**.
 
 ---
 
-## 🚀 Live Demo & Links
+##  Live Demo & Links
 
-* 🌐 **Live Web Application (Client)**: [https://etuitionbd-client.vercel.app](https://etuitionbd-client.vercel.app) *(or your deployed Vercel link)*
-* ⚡ **Live Backend API (Server)**: [https://etutionbdserver.vercel.app](https://etutionbdserver.vercel.app)
-* 📁 **Client Repository**: [GitHub Client Repo](https://github.com/mdmonirhossion/eTuitionBd-Client)
-* 📁 **Server Repository**: [GitHub Server Repo](https://github.com/mdmonirhossion/eTuitionBd-Client)
+*  **Live Web Application (Client)**: [https://etuitionbd-client.vercel.app](https://etuitionbd-client.vercel.app) *(or your deployed Vercel link)*
+*  **Live Backend API (Server)**: [https://etutionbdserver.vercel.app](https://etutionbdserver.vercel.app)
+*  **Client Repository**: [GitHub Client Repo](https://github.com/mdmonirhossion/eTuitionBd-Client)
+*  **Server Repository**: [GitHub Server Repo](https://github.com/mdmonirhossion/eTuitionBd-Client)
 
 ---
 
-## 🔑 Demo Credentials for Reviewers
+##  Demo Credentials for Reviewers
 
 | Role | Email | Password |
 |---|---|---|
-| **Admin** | `admin@etuitionbd.com` | `password123` |
+| **Admin** | `admin@etuitionbd.com` | `admin123` |
 | **Student** | `student@etuitionbd.com` | `password123` |
-| **Tutor** | `tutor@etuitionbd.com` | `password123` |
+| **Tutor** | `tutor@etuitionbd.com` | `` |
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
-### 🎓 Student Features
+###  Student Features
 * **Post New Tuition**: Create tuition requirement posts with subject, class, location, budget, and schedule.
 * **Manage Posted Tuitions**: View approved and pending tuition posts, edit details, or delete posts.
 * **Tutor Applications Review**: Review applied tutors (qualifications, experience, expected salary) and accept or reject applications.
@@ -33,21 +33,21 @@ A comprehensive, full-stack Tuition Management Platform built with **React 19**,
 * **Payment History**: View detailed receipts and transaction logs for paid tuition contracts.
 * **Profile Management**: Multi-subject preference selector (badge pills), avatar upload via Cloudinary, and contact information.
 
-### 👨‍🏫 Tutor Features
+###  Tutor Features
 * **Browse & Search Tuitions**: Filter tuitions by class, location, subject, and salary with real-time search & sorting.
 * **Tuition Application Flow**: Apply for tuitions with custom expected salary, experience, and qualifications.
 * **Application Status Tracking**: Track application progress (Pending, Approved, Rejected) and cancel pending requests.
 * **Ongoing Tuitions**: View all active tuition contracts assigned by students.
 * **Revenue History**: Track total earnings and completed payments from assigned tuitions.
 
-### 🛡️ Admin Features
+###  Admin Features
 * **User Management**: Audit registered users, change roles (`Student`, `Tutor`, `Admin`), view full user profiles in modal windows, and remove accounts.
 * **Tuition Moderation**: Moderate newly submitted student tuition posts. Approve or Reject requests before public listing.
 * **Reports & Financial Analytics**: Visual dashboard with earnings metrics, status distribution charts (Recharts), and transaction logs.
 
 ---
 
-## 🛠️ Tech Stack & Packages Used
+##  Tech Stack & Packages Used
 
 ### **Frontend (Client)**
 * **Core**: React 19, Vite 8, React Router DOM v7
@@ -68,7 +68,7 @@ A comprehensive, full-stack Tuition Management Platform built with **React 19**,
 
 ---
 
-## ⚙️ Environment Variables Setup
+##  Environment Variables Setup
 
 ### Frontend (`client/.env`)
 ```env
@@ -95,7 +95,7 @@ FIREBASE_SERVICE_ACCOUNT_BASE64=your_base64_encoded_firebase_admin_key
 
 ---
 
-## 📦 Local Installation & Setup
+##  Local Installation & Setup
 
 1. **Clone the repository**:
    ```bash
@@ -119,5 +119,5 @@ FIREBASE_SERVICE_ACCOUNT_BASE64=your_base64_encoded_firebase_admin_key
 
 ---
 
-## 📄 License
+##  License
 This project is open-source under the [MIT License](LICENSE).

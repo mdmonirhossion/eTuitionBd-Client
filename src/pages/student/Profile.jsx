@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useAxiosSecure } from '../../hooks/useAxiosSecure';
+import { ChangePassword } from '../../components/ChangePassword';
 import {
   Upload,
   User,
@@ -698,6 +699,9 @@ export const Profile = () => {
         </form>
 
       </div>
+
+      {/* Security & Change Password Section */}
+      <ChangePassword />
 
     </div>
   );

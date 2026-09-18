@@ -179,7 +179,7 @@ export const DashboardLayout = () => {
               <Menu className="w-6 h-6" />
             </button>
             <h1 className="text-xl font-bold font-heading text-base-content capitalize">
-              Welcome, {user?.displayName || dbUser?.name || 'User'}! 👋
+              Welcome, {user?.displayName || dbUser?.name || 'User'}! 
             </h1>
           </div>
 
